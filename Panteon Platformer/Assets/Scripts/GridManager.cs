@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -10,33 +8,32 @@ public class GridManager : MonoBehaviour
 
     private int gridColumnNumber;
     private int gridRowNumber;
-    private Vector3 wallPos;
 
-    private float wallWidth, wallHeight;
     private float wallLeftBound;
     private float wallBottomBound;
 
-    private GameObject parentGrid;
+    [SerializeField] private GameObject parentGrid;
     private GameObject[,] gridArray;
-    RaycastHit[] hit;
-    [SerializeField] public GameObject prefabPlane;
+    private RaycastHit[] hit;
+    public GameObject prefabPlane;
 
     public float paintCounter;
     private float totalGrid;
     public double percentagePainted;
 
-    public Camera FPSCamera;
+    public Camera paintRaycastCamera;
     public bool isActive;
+    public GameObject crosshair;
 
     public bool isVictoryStarted;
 
+    [SerializeField] private AudioManager audioManager;
 
     void Start()
     {
         isActive = false;
         isVictoryStarted = false;
         percentagePainted = 0;
-        parentGrid = GameObject.Find("GridHolder");
 
         // Number of grids for paintingWall
         gridColumnNumber = 100   ;
@@ -64,24 +61,34 @@ public class GridManager : MonoBehaviour
                 gridArray[x, y].name = "plane (" + x + "," + y + ")";
             }
         }
-
     }
 
     private void Update()
     {
         if (isActive)
         {
+            // Crosshair
+            crosshair.transform.position = new Vector3(paintRaycastCamera.transform.position.x, paintRaycastCamera.transform.position.y, 106.999f);
+
+            hit = Physics.SphereCastAll(paintRaycastCamera.transform.position, UnityEngine.Random.Range(0.1f,0.2f), paintRaycastCamera.transform.forward, 5f);
+
             if (Input.GetMouseButton(0))
             {
-                hit = Physics.SphereCastAll(FPSCamera.transform.position, 0.1f, FPSCamera.transform.forward, 5f);
+                if(!audioManager.isSprayPlaying)
+                {
+                    audioManager.playSpraySound();
+                }
+
                 foreach (RaycastHit obj in hit)
                 {
                     // Paint the plane red and increment the counter by 1 for every newly painted plane hit by the SphereCast
                     if (obj.collider.gameObject.tag == "PaintablePlane" && !obj.collider.gameObject.GetComponent<Painter>().isPainted)
                     {
-                        obj.collider.gameObject.GetComponent<Painter>().paintRed();
-                        obj.collider.gameObject.GetComponent<Painter>().isPainted = true;
-                        paintCounter++;
+                        {
+                            obj.collider.gameObject.GetComponent<Painter>().paintRed();
+                            obj.collider.gameObject.GetComponent<Painter>().isPainted = true;
+                            paintCounter++;
+                        }
 
                         // Calculating the percentage painted
                         percentagePainted = Math.Floor((paintCounter / totalGrid) * 100);
@@ -90,16 +97,19 @@ public class GridManager : MonoBehaviour
                 }     
             }
 
+            // Stop Spray Effect
+            if (Input.GetMouseButtonUp(0))
+            {    
+                audioManager.stopSpraySound();
+            }
+
             // Switch the music at the end
             if (percentagePainted == 100 && !isVictoryStarted)
             {
-                GameObject.Find("AudioManager").GetComponent<AudioManager>().SwitchMusic();
+                audioManager.GetComponent<AudioManager>().SwitchMusic();
                 isVictoryStarted = true;
             }
         }
-
-
-
     }
 
     // Activates the planes isActive mode for second stage

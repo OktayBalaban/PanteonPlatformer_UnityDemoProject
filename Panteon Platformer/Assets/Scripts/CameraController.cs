@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     // Camera Managing Variables
     public GameObject TPSCamera;
-    public GameObject FPSCamera;
+    public GameObject paintRaycastCamera;
+    public GameObject Stage2Camera;
 
     private enum selectedCamera { tps, fps};
     private selectedCamera activeCamera;
@@ -19,11 +18,9 @@ public class CameraController : MonoBehaviour
 
 
     // FPS Camera Variables
-    float rotationOnX;
-    float mouseSensitivity = 180f;
+    float mouseSensitivity = 1f;
     public Transform player;
 
-    // Start is called before the first frame update
     void Start()
     {
         // Hide Cursor
@@ -33,22 +30,23 @@ public class CameraController : MonoBehaviour
         activeCamera = selectedCamera.tps;
 
         TPSCamera.SetActive(true);
-        FPSCamera.SetActive(false);
+        paintRaycastCamera.SetActive(false);
 
         if (!useOffsetValues && activeCamera == selectedCamera.tps)
         {
             offset = target.position - transform.position;
         }
-
     }
 
-    // Update is called once per frame
     // LateUpdate is used for better camera performance
     void LateUpdate()
     {
         if (activeCamera == selectedCamera.tps)
         {
             TPSCamera.transform.position = target.position - offset;
+
+            // Fix camera x axis
+            TPSCamera.transform.position = new Vector3(-2, TPSCamera.transform.position.y, TPSCamera.transform.position.z);
         }
         else if (activeCamera == selectedCamera.fps)
         {
@@ -58,15 +56,8 @@ public class CameraController : MonoBehaviour
 
 
             // Up and Down
-            rotationOnX -= mouseY;
-            rotationOnX = Mathf.Clamp(rotationOnX, -90f, 90f);
-            FPSCamera.transform.localEulerAngles = new Vector3(rotationOnX, 0f, 0f);
-
-            // Left and Right
-            player.Rotate(Vector3.up * mouseX);
-
+            paintRaycastCamera.transform.position = new Vector3(paintRaycastCamera.transform.position.x + mouseX, paintRaycastCamera.transform.position.y + mouseY, paintRaycastCamera.transform.position.z);
         }
-
     }
 
     public void SwitchToFPS()
@@ -74,8 +65,6 @@ public class CameraController : MonoBehaviour
         activeCamera = selectedCamera.fps;
 
         TPSCamera.SetActive(false);
-        FPSCamera.SetActive(true);
-
+        Stage2Camera.SetActive(true);
     }
-
 }

@@ -1,27 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
     public AudioSource stageMusic;
     public AudioSource victoryMusic;
+    public AudioSource spraySound;
 
-    // Start is called before the first frame update
+    public bool isSprayPlaying;
+
     void Start()
     {
         stageMusic.Play();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        isSprayPlaying = false;
     }
 
     public void SwitchMusic()
     {
         stageMusic.Stop();
         victoryMusic.Play();
+    }
+
+    public void playSpraySound()
+    {
+        spraySound.Play();
+        isSprayPlaying = true;
+    }
+
+    public void stopSpraySound()
+    {
+        spraySound.Stop();
+        isSprayPlaying = false;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class starObstacleMover : MonoBehaviour
@@ -13,26 +11,22 @@ public class starObstacleMover : MonoBehaviour
     private enum positionStatus {pos1, pos2};
     positionStatus obstaclePosStatus;
     
-
-    // Start is called before the first frame update
     void Start()
     {
-        if(transform.position.z == -49f)
+        if(transform.position.x == -13f)
         {
 
             obstaclePosStatus = positionStatus.pos1;
         }
         else
         {
-
             obstaclePosStatus = positionStatus.pos2;
         }
 
-        position1 = new Vector3(transform.position.x, transform.position.y, -50f);
-        position2 = new Vector3(transform.position.x, transform.position.y, -60f);
+        position1 = new Vector3(-13, transform.position.y, transform.position.z);
+        position2 = new Vector3(9, transform.position.y, transform.position.z);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (obstaclePosStatus == positionStatus.pos1)

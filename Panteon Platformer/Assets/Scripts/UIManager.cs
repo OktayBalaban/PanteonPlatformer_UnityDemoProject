@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,10 +17,6 @@ public class UIManager : MonoBehaviour
     float checkingLocation;
     int playerPosition;
 
-
-
-
-    // Start is called before the first frame update
     void Start()
     {
         // Start with the first stage UI
@@ -32,11 +26,8 @@ public class UIManager : MonoBehaviour
 
         // Get the Grid Manager for percentage painted updates
         gridManager = GameObject.Find("GridHolder");
-
-
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (activeUI == ActiveUI.stage1)
@@ -54,7 +45,6 @@ public class UIManager : MonoBehaviour
 
             // Update the text
             percentageText.text = "PERCENTAGE PAINTED: " + percentagePainted + "%";
-
         }
     }
 

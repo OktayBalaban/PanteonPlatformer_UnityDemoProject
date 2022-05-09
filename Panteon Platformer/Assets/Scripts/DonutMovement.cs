@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DonutMovement : MonoBehaviour
@@ -17,8 +15,6 @@ public class DonutMovement : MonoBehaviour
     private enum positionStatus {Start, pos1, pos2 };
     positionStatus donutPosStatus;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         // Get the donut's start position
@@ -27,13 +23,8 @@ public class DonutMovement : MonoBehaviour
 
         position1 = donutStartingPosition - new Vector3(2, 0, 0);
         position2 = donutStartingPosition + new Vector3(2, 0, 0);
-
-
-
-
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (waitTimeCounter < 0)

@@ -59,7 +59,8 @@ public class PlayerController : MonoBehaviour
         gridManager = GameObject.Find("GridHolder");
 
         isRespawning = false;
-        
+
+
     }
 
     // Update is called once per frame
@@ -69,11 +70,15 @@ public class PlayerController : MonoBehaviour
 
         if (stage == stageStatus.stage1 && !isRespawning)
         {
+            
             if(knockbackCounter <= 0)
             {
                 float yStore = moveDirection.y;
 
-                moveDirection = (transform.forward * Input.GetAxis("Vertical")) + transform.right * Input.GetAxis("Mouse X");
+                if (Input.GetAxis("Vertical") != 0)
+                {
+                    moveDirection = (transform.forward * Input.GetAxis("Vertical")) + transform.right * Input.GetAxis("Mouse X");
+                }
                 moveDirection = moveDirection.normalized * moveSpeed;
                 moveDirection.y = yStore;
             }
@@ -112,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Animations
-        anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Mouse X"))));
+        anim.SetFloat("Speed", Mathf.Abs(Input.GetAxis("Vertical")));
         anim.SetBool("isGrounded", controller.isGrounded);
     }
 

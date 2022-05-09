@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,8 +27,6 @@ public class AIController : MonoBehaviour
     public GameObject renderingObj1;
     public GameObject renderingObj2;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         // Set destination point
@@ -44,7 +41,6 @@ public class AIController : MonoBehaviour
         forward = transform.forward;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(transform.position, destination) > 1)
@@ -59,9 +55,7 @@ public class AIController : MonoBehaviour
         // Animation Controls
         if (agent.velocity.magnitude > 1)
         {
-
             isRunning = true;
-
         }
         else
         {
@@ -75,19 +69,15 @@ public class AIController : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-
-
         if (other.gameObject.tag == "KillerObstacle")
         {
             transform.position = respawnPoint;
             respawn();
         }
-
     }
 
     public void respawn()
     {
-
         if (!isRespawning)
         {
             Debug.Log("Coroutine Started");
@@ -96,12 +86,10 @@ public class AIController : MonoBehaviour
         }
 
         // Respawning Effect
-
     }
 
     public IEnumerator respawnCo()
     {
-
         Debug.Log("Coroutine respawnCo entered");
         // Player is disappeared
 
@@ -110,7 +98,6 @@ public class AIController : MonoBehaviour
         yield return new WaitForSeconds(respawnLength);
         // Player is reappeared
         isRespawning = false;
-
     }
 
     public IEnumerator respawningEffectCo()
@@ -143,6 +130,5 @@ public class AIController : MonoBehaviour
 
         // Update previous pos for next frame
         previousPos = newPos;
-        
     }
 }
